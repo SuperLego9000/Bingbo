@@ -2,7 +2,9 @@ import subprocess as subp
 import data.JsonUtils as jsu
 import threading
 from time import sleep as wait
+from os import system as sys
 print("[40m[97m")
+sys("cls")
 def rich(user, key):
     print(f"[35mclaiming points for user: {user}[97m")
     try:
@@ -19,4 +21,6 @@ data = jsu.read(data)
 if data == []:
     raise(ValueError("no users in database"))
 for _, person in enumerate(data):
-    rich(person[0], person[1])
+    if person[2]:
+        for i in range(3):
+            rich(person[0], person[1])

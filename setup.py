@@ -8,8 +8,11 @@ while 1:
     users = []
     for i, user in enumerate(data):
         users.append(user)
-
-    where = gui.confirm(users, title, ["edit", "new", "exit"])
+    enabled=[]
+    for i , user in enumerate(users):
+        if user[2]:
+            enabled.append(user)
+    where = gui.confirm(f"enabled users:\n{enabled}", title, ["edit", "new", "exit"])
 
     if where == "edit":
         if users==[]:
@@ -20,14 +23,14 @@ while 1:
             if _==str(user):
                 who=user
                 break
-        what = gui.confirm(who, title, ["edit", "delete"])
+        what = gui.confirm(who, title, ["edit", "delete","toggle"])
 
         if what == "edit":
             name = gui.prompt("new user", title, who[0])
             key = gui.prompt("new pass", title)
             for i, user in enumerate(data):
                 if user[0] == who[0]:
-                    data[i] = [name, key]
+                    data[i] = [name, key,1]
                     jsu.write(data, datafile)
                     gui.alert("entry changed", title)
                     break
@@ -39,11 +42,23 @@ while 1:
                     # data[i]=None
                     jsu.write(data, datafile)
                     gui.alert("entry deleted", title)
-
+        if what == "toggle":
+            index=None
+            for _,user in enumerate(data):
+                if who==user:
+                    index=_
+                    break
+            if who[2]==1:
+                data[index][2]=0
+            elif who[2]==0:
+                data[index][2]=1
+            jsu.write(data, datafile)
+            gui.alert("entry toggled", title)
+            
     if where == "new":
         name = gui.prompt("new user", title)
         key = gui.prompt("new pass", title)
-        data.append([name, key])
+        data.append([name, key,1])
         jsu.write(data, datafile)
 
     if where == "exit":
